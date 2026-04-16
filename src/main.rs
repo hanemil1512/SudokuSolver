@@ -5,7 +5,7 @@
 3. passa að hver kassi er ekki með sömu töluna
 */
 
-fn is_vec_unique(v: &Vec<u8>) -> bool{
+fn is_vec_unique(v: &Vec<i8>) -> bool{
     let mut xcon = 0;
     let mut ycon;
     for numx in v{
@@ -25,7 +25,7 @@ fn is_vec_unique(v: &Vec<u8>) -> bool{
     return true;
 }
 
-fn remove_vec_replicas(v: &Vec<u8>){
+fn remove_vec_replicas(v: &Vec<i8>){
     let mut xcon = 0;
     let mut ycon;
     for numx in v{
@@ -56,14 +56,14 @@ ______
 |7|8|9|
 ‾‾‾‾‾‾
  * */
-fn is_solvable(board: &Vec<Vec<u8>>) -> bool{
-    let mut vec_x: Vec<u8> = Vec::new();
-    let mut vec_y: Vec<u8> = Vec::new();
-    let mut vec_box: Vec<u8> = Vec::new(); 
+fn is_solvable(board: &Vec<Vec<i8>>) -> bool{
+    let mut vec_x: Vec<i8> = Vec::new();
+    let mut vec_y: Vec<i8> = Vec::new();
+    let mut vec_box: Vec<i8> = Vec::new(); 
     //i8 svo að það er sama týpa þegar er reiknað með box_y og box_x
     for x in 0i8..9{
         for y in 0i8..9{
-            //þarf að nota usize í vector þannig það er síðan breytt til baka
+            //þarf að nota usize í vector þannig það er síðan breytt til baka 
             if board[x as usize][y as usize] != 0 {
                 vec_x.push(board[x as usize][y as usize]);
             }
@@ -73,7 +73,7 @@ fn is_solvable(board: &Vec<Vec<u8>>) -> bool{
             //Holy shit hvað þetta er sniðugt!!
             //þetta passar að boxX er alltaf á bilinu 0-2
             //
-            let box_x: i8 = y + 3*(x -(x/3)*3 - y/3);
+            let box_x: i8 = y + 3*(x % 3 - y/3);
             let box_y: i8 = y/3 + 3*(x/3);
             if board[box_x as usize][box_y as usize] != 0 {
                 vec_box.push(board[box_x as usize][box_y as usize])
@@ -90,12 +90,15 @@ fn is_solvable(board: &Vec<Vec<u8>>) -> bool{
 }
 
 
-fn solve_sudoku_board(solved_board: Vec<Vec<u8>>){
-    let mut square: Vec<Vec<u8>> = Vec::new();
+fn solve_sudoku_board(solved_board: &Vec<Vec<i8>>){
+    let mut square: Vec<Vec<i8>> = vec![vec![0;9];9];
     loop{
         for x in 0i8..9{
+            //Fluff þarf að vera resetað eftir hvern kasss
+            let mut fluff: Vec<Vec<i8>> = vec![vec![1,2,3,4,5,6,7,8,9];9];
             for y in 0i8..9{
-                let box_x: i8 = y + 3*(x -(x/3)*3 - y/3);
+                //Formúla sem lætur skoða einn kassa í einu, skoða efri mynd
+                let box_x: i8 = y + 3*(x % 3 - y/3);
                 let box_y: i8 = y/3 + 3*(x/3);
 
             }
@@ -106,7 +109,7 @@ fn solve_sudoku_board(solved_board: Vec<Vec<u8>>){
 
 fn main() {
     //board[row][col]
-    let unsolved_board: Vec<Vec<u8>> = vec![
+    let unsolved_board: Vec<Vec<i8>> = vec![
     vec![5, 3, 0, 0, 7, 0, 0, 0, 0],
     vec![6, 0, 0, 1, 9, 5, 0, 0, 0],
     vec![0, 9, 8, 0, 0, 0, 0, 6, 0],
